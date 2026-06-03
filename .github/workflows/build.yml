@@ -12,10 +12,17 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Unzip
-        run: unzip "ARIA-Android-Complete-2.zip"
+        run: |
+          unzip "ARIA-Android-Complete-2.zip"
+          echo "=== ROOT ===" && ls -la
+          echo "=== ARIA-Android ===" && ls -la ARIA-Android/
+      - name: Install Gradle wrapper
+        run: |
+          cd ARIA-Android
+          gradle wrapper --gradle-version 8.2
       - name: Build
         run: |
-          cd ARIA-Android/ARIA-Android
+          cd ARIA-Android
           chmod +x gradlew
           ./gradlew assembleDebug --stacktrace
       - name: Upload APK
