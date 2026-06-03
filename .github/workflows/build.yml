@@ -3,8 +3,6 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -16,9 +14,14 @@ jobs:
       - name: Unzip
         run: unzip "ARIA-Android-Complete-2.zip"
       - name: Build
-        run: cd ARIA-Android && chmod +x gradlew && ./gradlew assembleDebug --stacktrace
+        run: |
+          FOLDER=$(find . -name "gradlew" -type f | head -1 | xargs dirname)
+          echo "Found: $FOLDER"
+          cd "$FOLDER"
+          chmod +x gradlew
+          ./gradlew assembleDebug --stacktrace
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: ARIA-APK
-          path: ARIA-Android/app/build/outputs/apk/debug/app-debug.apk
+          path: "**/app-debug.apk"
