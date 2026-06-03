@@ -1,24 +1,22 @@
 name: Build ARIA APK
-on:
-  push:
-    branches: [ main ]
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Unzip project
-        run: unzip ARIA-Android-Complete-2.zip
-      - name: Build APK
-        run: |
-          cd ARIA-Android
-          chmod +x gradlew
-          ./gradlew assembleDebug
+      - name: Unzip
+        run: unzip "ARIA-Android-Complete-2.zip"
+      - name: Build
+        run: cd ARIA-Android && chmod +x gradlew && ./gradlew assembleDebug --stacktrace
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
