@@ -13,12 +13,12 @@ jobs:
           distribution: 'temurin'
       - name: Unzip
         run: unzip "ARIA-Android-Complete-2.zip"
+      - name: Show structure
+        run: find . -name "gradlew" 2>/dev/null && ls -la
       - name: Build
         run: |
-          FOLDER=$(find . -name "gradlew" -type f | head -1 | xargs dirname)
-          echo "Found: $FOLDER"
-          cd "$FOLDER"
-          chmod +x gradlew
+          chmod +x ARIA-Android/gradlew
+          cd ARIA-Android
           ./gradlew assembleDebug --stacktrace
       - name: Upload APK
         uses: actions/upload-artifact@v4
